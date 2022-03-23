@@ -1,0 +1,23 @@
+---
+- hosts: localhost
+  gather_facts: no
+
+  tasks:
+
+    - name: Launch Aerospike
+      community.docker.docker_container:
+        container_default_behavior: no_defaults
+        name: pgnd_aerospike
+        image: aerospike:ce-5.7.0.11
+        auto_remove: yes
+        recreate: yes
+        published_ports:
+          - 3000-3002:3000-3002
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: db1_tpl
+        network_mode: network_one
+        networks:
+          - name: network_one
+      register: result
