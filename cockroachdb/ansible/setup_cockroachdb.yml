@@ -4,16 +4,21 @@
 
   tasks:
 
-    - name: Launch Aerospike
+    - name: Create a network
+      community.docker.docker_network:
+        name: network_one
+
+    - name: Launch CockroachDB
       community.docker.docker_container:
         container_default_behavior: no_defaults
-        name: pgnd_aerospike
-        image: aerospike:ce-5.7.0.11
+        name: pgnd_cockroachdb
+        image: cockroachdb/cockroach:v21.2.7
         auto_remove: yes
         recreate: yes
         published_ports:
-          - 3000-3002:3000-3002
+          - 26257:26257
+          - 8080:8080
         network_mode: network_one
         networks:
           - name: network_one
-      register: result
+        command: start-single-node --insecure
