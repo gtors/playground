@@ -2,9 +2,9 @@
 - hosts: localhost
   gather_facts: no
   tasks:
-    - name: "Stop CockroachDB"
+    - name: "Stop Etcd"
       community.docker.docker_container:
         container_default_behavior: no_defaults
-        name: pgnd_cockroachdb
+        name: pgnd_etcd
         state: absent
         force_kill: true
