@@ -2,9 +2,9 @@
 - hosts: localhost
   gather_facts: no
   tasks:
-    - name: "Stop "
+    - name: "Stop Scylla"
       community.docker.docker_container:
         container_default_behavior: no_defaults
-        name: pgnd_
+        name: pgnd_scylla
         state: absent
         force_kill: true
