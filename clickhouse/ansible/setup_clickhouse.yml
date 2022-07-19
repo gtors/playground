@@ -8,17 +8,17 @@
       community.docker.docker_network:
         name: network_one
 
-    - name: Launch Consul
+    - name: Launch ClickHouse
       community.docker.docker_container:
         container_default_behavior: no_defaults
-        name: pgnd_consul
-        image: consul:1.9
+        name: pgnd_clickhouse
+        image: yandex/clickhouse-server:21
         auto_remove: yes
         recreate: yes
         published_ports:
-          - 8500:8500
-          - 8600:8600/udp
+          - 127.0.0.1:9000:9000
         network_mode: network_one
         networks:
           - name: network_one
-        command: consul agent -server -ui -node=server-1 -bootstrap-expect=1 -client=0.0.0.0 -bind=127.0.0.1 -data-dir=/tmp
+        env:
+          DEBIAN_FRONTEND: noninteractive

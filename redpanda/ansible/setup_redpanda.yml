@@ -1,0 +1,33 @@
+---
+- hosts: localhost
+  gather_facts: no
+  tasks:
+
+    - name: Launch Redpanda
+      community.docker.docker_container:
+        container_default_behavior: no_defaults
+        name: pgnd_redpanda
+        image: vectorized/redpanda:v21.7.6-amd64
+        auto_remove: yes
+        recreate: yes
+        command: >
+          redpanda start
+          --overprovisioned
+          --smp 1
+          --memory 1G
+          --reserve-memory 0M
+          --node-id 0
+          --check=false
+          --kafka-addr PLAINTEXT://0.0.0.0:29092,OUTSIDE://0.0.0.0:9092
+          --advertise-kafka-addr PLAINTEXT://pgnd_redpanda:29092,OUTSIDE://localhost:9092
+        published_ports:
+          - 127.0.0.1:9092:9092
+          - 127.0.0.1:29092:29092
+      register: result
+
+    - name: Add a container to a network
+      community.docker.docker_network:
+        name: network_one
+        connected:
+          - pgnd_redpanda
+        appends: yes
