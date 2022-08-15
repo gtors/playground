@@ -12,11 +12,12 @@
       community.docker.docker_container:
         container_default_behavior: no_defaults
         name: pgnd_clickhouse
-        image: yandex/clickhouse-server:21
+        image: clickhouse/clickhouse-server:22
         auto_remove: yes
         recreate: yes
         published_ports:
           - 127.0.0.1:9000:9000
+          - 127.0.0.1:8123:8123
         network_mode: network_one
         networks:
           - name: network_one
