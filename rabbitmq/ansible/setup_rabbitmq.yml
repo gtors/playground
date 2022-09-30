@@ -1,0 +1,22 @@
+---
+- hosts: localhost
+  gather_facts: no
+
+  tasks:
+
+    - name: Create a network
+      community.docker.docker_network:
+        name: network_one
+
+    - name: Launch RabbitMQ
+      community.docker.docker_container:
+        container_default_behavior: no_defaults
+        name: pgnd_rabbitmq
+        image: rabbitmq:3.11
+        auto_remove: yes
+        recreate: yes
+        published_ports:
+          - 5672:5672
+        network_mode: network_one
+        networks:
+          - name: network_one
