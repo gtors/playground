@@ -19,5 +19,6 @@
           - 127.0.0.1:4222:4222
           - 127.0.0.1:8222:8222
         network_mode: network_one
+        command: -js
         networks:
           - name: network_one

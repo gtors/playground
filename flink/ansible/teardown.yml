@@ -1,0 +1,16 @@
+---
+- hosts: localhost
+  gather_facts: no
+  tasks:
+    - name: "Stop Flink Job Manager"
+      community.docker.docker_container:
+        container_default_behavior: no_defaults
+        name: pgnd_flink_jm
+        state: absent
+        force_kill: true
+    - name: "Stop Flink Task Manager"
+      community.docker.docker_container:
+        container_default_behavior: no_defaults
+        name: pgnd_flink_tm
+        state: absent
+        force_kill: true

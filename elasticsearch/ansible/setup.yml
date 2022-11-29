@@ -1,0 +1,26 @@
+---
+- hosts: localhost
+  gather_facts: no
+
+  tasks:
+
+    - name: Create a network
+      community.docker.docker_network:
+        name: network_one
+
+    - name: Launch ElasticSearch
+      community.docker.docker_container:
+        container_default_behavior: no_defaults
+        name: pgnd_elasticsearch
+        image: elasticsearch:8.5.1
+        auto_remove: yes
+        recreate: yes
+        published_ports:
+          - 9200:9200
+          - 9300:9300
+        network_mode: network_one
+        env: 
+          "discovery.type": single-node
+          ES_JAVA_OPTS: -Xmx512m
+        networks:
+          - name: network_one

@@ -1,0 +1,44 @@
+---
+- hosts: localhost
+  gather_facts: no
+
+  tasks:
+
+    - name: Create a network
+      community.docker.docker_network:
+        name: network_one
+
+    - name: Launch Flink Job Manager
+      community.docker.docker_container:
+        container_default_behavior: no_defaults
+        name: pgnd_flink_jm
+        image: flink:1.15
+        auto_remove: yes
+        recreate: yes
+        command: jobmanager
+        env:
+          JOB_MANAGER_RPC_ADDRESS=pgnd_flink_jm
+        published_ports:
+          - 8081:8081
+          - 6123:6123
+        network_mode: network_one
+        networks:
+          - name: network_one
+        volumes:
+          - /tmp/pgnd_flink:/data/flink
+
+    - name: Launch Flink Task Manager
+      community.docker.docker_container:
+        container_default_behavior: no_defaults
+        name: pgnd_flink_tm
+        image: flink:1.15
+        auto_remove: yes
+        recreate: yes
+        command: taskmanager
+        env:
+          JOB_MANAGER_RPC_ADDRESS=pgnd_flink_jm
+        network_mode: network_one
+        networks:
+          - name: network_one
+        volumes:
+          - /tmp/pgnd_flink:/data/flink

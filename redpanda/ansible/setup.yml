@@ -7,7 +7,7 @@
       community.docker.docker_container:
         container_default_behavior: no_defaults
         name: pgnd_redpanda
-        image: vectorized/redpanda:v22.1.7-amd64
+        image: vectorized/redpanda:v22.3.4-amd64
         auto_remove: yes
         recreate: yes
         command: >

@@ -5,50 +5,56 @@ help:
 
 .PHONY: aerospike
 aerospike:
-	ansible-playbook aerospike/ansible/setup_aerospike.yml
+	ansible-playbook aerospike/ansible/setup.yml
 
 ch: clickhouse
 
 .PHONY: clickhouse
 clickhouse:
-	ansible-playbook clickhouse/ansible/setup_clickhouse.yml
+	ansible-playbook clickhouse/ansible/setup.yml
 
 .PHONY: cockroachdb
 cockroachdb:
-	ansible-playbook cockroachdb/ansible/setup_cockroachdb.yml
+	ansible-playbook cockroachdb/ansible/setup.yml
 
 .PHONY: consul
 consul:
-	ansible-playbook consul/ansible/setup_consul.yml
+	ansible-playbook consul/ansible/setup.yml
 
 .PHONY: etcd
 etcd:
-	ansible-playbook etcd/ansible/setup_etcd.yml
+	ansible-playbook etcd/ansible/setup.yml
 
 .PHONY: flink
 flink:
-	ansible-playbook flink/ansible/setup_flink.yml
+	ansible-playbook flink/ansible/setup.yml
 
 .PHONY: nats
 nats:
-	ansible-playbook nats/ansible/setup_nats.yml
+	ansible-playbook nats/ansible/setup.yml
 
 .PHONY: mq
 mq: rabbitmq
 
 .PHONY: rabbitmq
 rabbitmq:
-	ansible-playbook rabbitmq/ansible/setup_rabbitmq.yml
+	ansible-playbook rabbitmq/ansible/setup.yml
 
 .PHONY: kafka
 kafka: redpanda
 
 .PHONY: redpanda
 redpanda:
-	ansible-playbook redpanda/ansible/setup_redpanda.yml
+	ansible-playbook redpanda/ansible/setup.yml
 
 cassandra: scylla
 
 .PHONY: scylla
 scylla:
-	ansible-playbook scylla/ansible/setup_scylla.yml
+	ansible-playbook scylla/ansible/setup.yml
+
+es: elasticsearch
+
+.PHONY: elasticsearch
+elasticsearch:
+	ansible-playbook elasticsearch/ansible/setup.yml
