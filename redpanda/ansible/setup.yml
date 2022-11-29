@@ -10,8 +10,16 @@
         image: vectorized/redpanda:v22.3.4-amd64
         auto_remove: yes
         recreate: yes
+        # BUG: redpanda doesn't work on f2fs:
+        # https://github.com/redpanda-data/redpanda/issues/3798
+        mounts:
+          - target: /tmp
+            tmpfs_size: 256M
+            read_only: false
+            type: tmpfs
         command: >
           redpanda start
+          --config /tmp/config.yml
           --overprovisioned
           --smp 1
           --memory 1G
