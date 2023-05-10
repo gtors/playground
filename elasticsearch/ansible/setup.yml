@@ -21,6 +21,7 @@
         network_mode: network_one
         env: 
           "discovery.type": single-node
+          "xpack.security.enabled": "false"
           ES_JAVA_OPTS: -Xmx512m
         networks:
           - name: network_one
