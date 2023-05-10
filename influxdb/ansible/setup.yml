@@ -1,0 +1,26 @@
+---
+- hosts: localhost
+  gather_facts: no
+
+  tasks:
+
+    - name: Create a network
+      community.docker.docker_network:
+        name: network_one
+
+    - name: Launch 
+      community.docker.docker_container:
+        container_default_behavior: no_defaults
+        name: pgnd_influxdb
+        image: influxdb:2.7-alpine
+        auto_remove: yes
+        recreate: yes
+        published_ports:
+          - 127.0.0.1:8086:8086
+        network_mode: network_one
+        networks:
+          - name: network_one
+        env:
+          INFLUXDB_DB: db0
+          INFLUXDB_ADMIN_USER: admin
+          INFLUXDB_ADMIN_PASSWORD: admin
