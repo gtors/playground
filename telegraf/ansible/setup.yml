@@ -1,0 +1,20 @@
+---
+- hosts: localhost
+  gather_facts: no
+
+  tasks:
+
+    - name: Create a network
+      community.docker.docker_network:
+        name: network_one
+
+    - name: Launch 
+      community.docker.docker_container:
+        container_default_behavior: no_defaults
+        name: pgnd_telegraf
+        image: telegraf:1.26-alpine
+        auto_remove: yes
+        recreate: yes
+        network_mode: network_one
+        networks:
+          - name: network_one
