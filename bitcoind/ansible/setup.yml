@@ -1,0 +1,41 @@
+---
+- hosts: localhost
+  gather_facts: no
+
+  tasks:
+
+    - name: Create a network
+      community.docker.docker_network:
+        name: network_one
+
+    - name: Build image
+      community.docker.docker_image:
+        name: bitcoind
+        source: build
+        force_source: true
+        build:
+          path: .
+
+    - name: Launch 
+      community.docker.docker_container:
+        container_default_behavior: no_defaults
+        name: pgnd_bitcoind
+        image: bitcoind
+        auto_remove: yes
+        recreate: yes
+        published_ports:
+          - 18443:18443
+          - 18444:18444
+        network_mode: network_one
+        networks:
+          - name: network_one
+
+    - name: Create test wallet
+      community.docker.docker_container_exec:
+        container: pgnd_bitcoind
+        command: bitcoin-cli -regtest=1 -rpcuser=test -rpcpassword=test createwallet "test"
+
+    - name: Generate balance
+      community.docker.docker_container_exec:
+        container: pgnd_bitcoind
+        command: bitcoin-cli -regtest=1 -rpcuser=test -rpcpassword=test -generate 100

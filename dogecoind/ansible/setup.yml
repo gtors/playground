@@ -1,0 +1,34 @@
+---
+- hosts: localhost
+  gather_facts: no
+
+  tasks:
+
+    - name: Create a network
+      community.docker.docker_network:
+        name: network_one
+
+    - name: Build image
+      community.docker.docker_image:
+        name: dogecoind
+        source: build
+        build:
+          path: .
+
+    - name: Launch 
+      community.docker.docker_container:
+        container_default_behavior: no_defaults
+        name: pgnd_dogecoind
+        image: dogecoind
+        auto_remove: yes
+        recreate: yes
+        published_ports:
+          - 18332:18332  # regtest rpc port
+        network_mode: network_one
+        networks:
+          - name: network_one
+
+    - name: Generate balance
+      community.docker.docker_container_exec:
+        container: pgnd_dogecoind
+        command: dogecoin-cli -regtest=1 -rpcuser=test -rpcpassword=test generate 100

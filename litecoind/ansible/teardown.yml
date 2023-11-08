@@ -1,0 +1,10 @@
+---
+- hosts: localhost
+  gather_facts: no
+  tasks:
+    - name: "Stop litecoind"
+      community.docker.docker_container:
+        container_default_behavior: no_defaults
+        name: pgnd_litecoind
+        state: absent
+        force_kill: true

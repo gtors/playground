@@ -1,0 +1,39 @@
+---
+- hosts: localhost
+  gather_facts: no
+
+  tasks:
+
+    - name: Create a network
+      community.docker.docker_network:
+        name: network_one
+
+    - name: Build image
+      community.docker.docker_image:
+        name: litecoind
+        source: build
+        build:
+          path: .
+
+    - name: Launch 
+      community.docker.docker_container:
+        container_default_behavior: no_defaults
+        name: pgnd_litecoind
+        image: litecoind
+        auto_remove: yes
+        recreate: yes
+        published_ports:
+          - 19444:19444  # regtest rpc port
+        network_mode: network_one
+        networks:
+          - name: network_one
+
+    - name: Create test wallet
+      community.docker.docker_container_exec:
+        container: pgnd_litecoind
+        command: litecoin-cli -regtest=1 -rpcuser=test -rpcpassword=test createwallet "test"
+
+    - name: Generate balance
+      community.docker.docker_container_exec:
+        container: pgnd_litecoind
+        command: litecoin-cli -regtest=1 -rpcuser=test -rpcpassword=test -generate 100
