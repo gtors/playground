@@ -1,0 +1,10 @@
+---
+- hosts: localhost
+  gather_facts: no
+  tasks:
+    - name: "Stop "
+      community.docker.docker_container:
+        container_default_behavior: no_defaults
+        name: pgnd_vm
+        state: absent
+        force_kill: true
